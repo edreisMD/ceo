@@ -1,0 +1,54 @@
+# PRIVATE installation configuration. Replace every example binding.
+version: 1
+instance: portfolio
+orca: /absolute/path/to/orca
+controlWorkspace: /absolute/path/to/ceo-control-workspace
+stateDir: /absolute/path/to/private/.ceo
+limits:
+  workers: 3
+  implementationsPerProject: 1
+  workflowsPerProject: 1
+  turnsPerDay: 24
+  workerStartsPerProjectPerDay: 8
+evolution:
+  enabled: false
+  catalogPath: /absolute/path/to/company-os
+  trustedRevision: '0000000000000000000000000000000000000000'
+  branch: ceo/active
+  remote: https://github.com/example/company-os
+  visibility: public
+  editableDepartments: [engineering, operations, sales]
+  maxRolesPerDepartment: 12
+  experimentsPerProjectPerWeek: 1
+projects:
+  - id: website
+    repository: example/website
+    defaultBranch: main
+    sourcePath: /absolute/path/to/website
+    controlWorkspace: /absolute/path/to/website-control-workspace
+    team: frontend
+    enabled: false
+    catalogPath: /absolute/path/to/company-os
+    catalogRevision: '0000000000000000000000000000000000000000'
+    harnesses: {default: codex}
+    productionUrl: https://website.example.com
+    # Optional: configure only the exact workspace/team/project to consume.
+    # linear:
+    #   workspace: private-workspace-id
+    #   team: private-team-id
+    #   project: private-project-id
+    #   titlePrefix: '[website]'
+    #   readyStates: [Todo]
+    #   doneState: Done
+    #   founderIds: [private-founder-id]
+  - id: library
+    repository: example/library
+    defaultBranch: main
+    sourcePath: /absolute/path/to/library
+    controlWorkspace: /absolute/path/to/library-control-workspace
+    team: open-source
+    enabled: false
+    catalogPath: /absolute/path/to/company-os
+    catalogRevision: '0000000000000000000000000000000000000000'
+    harnesses: {default: codex}
+    productionUrl: https://library.example.com

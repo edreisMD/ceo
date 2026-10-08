@@ -35,6 +35,8 @@ Copy `examples/config.yaml` to a private `~/.ceo/config.yaml` and replace its pa
 
 Launch `ceo host` in its own Orca terminal. Orca supplies its caller identity. Pi provider login and model selection remain native Pi commands. Ordinary-terminal `ceo attach` connects to that host's private authenticated Unix socket; inputs, answers and session history share one conversation. From an ordinary terminal, `ceo` can create its own Orca terminal once and records the launch receipt before retrying an uncertain result. Remote installations run ceo on the Orca host; use an SSH terminal there to attach.
 
+Pi must have a provider login before model work can run. An existing login in another harness does not automatically authenticate Pi. If its configuration directory is new, create it through normal Pi setup before launching from Orca so Orca can install its managed status extensions. ceo explicitly loads those native extensions while keeping team extensions disabled.
+
 For Orca's Pi launch profile, use a command override pointing to `ceo host --config /absolute/private/config.yaml`. Preserve Orca's native Pi extension flags and environment. ceo disables discovery of repository-supplied extensions, skills, prompt templates and MCP servers; configured native launch extensions passed explicitly remain supported. CompanyOS is read as data.
 
 ## Delivery and decisions
@@ -70,5 +72,7 @@ npm run build
 ```
 
 Fixture and fault tests cover multi-project progress, approvals, revision changes, receipt recovery, native settlement, idle queues, organization activation/rollback and authenticated terminal attachment. Live cutover requires a bounded smoke test with two installed harnesses, native session visibility and reconciliation of existing workers. Preserve the previous pilot's IDs, plans and pending decisions; pause its previous schedule only after a verified handoff. Temporal and unrelated schedules remain paused.
+
+`ceo stage-pilot <project> <private-binding.json> <private-active.json>` stages the previous frontend pilot in a paused state, verifies the settled planner, preserves task/Run/decision IDs and plan hash, and archives original records privately. It neither recreates tasks nor changes schedule ownership. An unfinished worker, insufficient provider credit, retained user-owned terminal or absent production target blocks live acceptance; the runtime never fabricates success or takes over user-owned terminals.
 
 New-project provisioning, cloud deployment teams, sales organizations, external memory services and a dedicated Orca chat window follow the reliable two-project pilot.
