@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.ceo/
+*.local.yaml
+*.local.json
+.env*
+coverage/
+*.sqlite*
+*.sock
