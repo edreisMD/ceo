@@ -180,9 +180,11 @@ export class Workflow {
     const result = await this.orca.mutate(`dispatch:${goal.id}:${step.id}`, goal.runId!, 'worker-start', '--task', state.taskId!, '--agent', harness, '--timeout-ms', '30000', ...placement);
     const dispatchId = result.dispatch?.id ?? result.dispatchId;
     if (!dispatchId) throw new Error('Worker start has no authoritative Dispatch id');
-    this.store.saveStep({ ...state, dispatchId, status: 'dispatched' });
-    this.store.increment(counter);
-    this.store.emit('worker_started', { step: step.id, dispatchId, harness }, goal.id);
+    this.store.transaction(() => {
+      this.store.saveStep({ ...state, dispatchId, status: 'dispatched' });
+      this.store.increment(counter);
+      this.store.emit('worker_started', { step: step.id, dispatchId, harness }, goal.id);
+    });
     return result;
   }
   async settle(goal: Goal, step: Step): Promise<void> {
