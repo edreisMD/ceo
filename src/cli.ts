@@ -11,6 +11,7 @@ import { connectConversation } from './socket.js';
 import { runHarness } from './harness.js';
 import { CoordinatorLoop } from './loop.js';
 import { Workflow } from './workflow.js';
+import { stageFrontendPilot } from './migration.js';
 
 const quote = (text: string) => "'" + text.replaceAll("'", "'\\''") + "'";
 async function attach(home: string): Promise<void> {
@@ -38,6 +39,14 @@ export async function cli(args = process.argv.slice(2)): Promise<void> {
   if (!existsSync(configPath)) throw new Error(`Create private installation configuration at ${configPath}; see examples/config.yaml`);
   const config = loadConfig(configPath), command = args[0];
   const native = cliTransport(config.orca);
+  if (command === 'stage-pilot') {
+    const [project, binding, state] = args.slice(1);
+    if (!project || !binding || !state) throw new Error('stage-pilot <project> <private-binding.json> <private-active.json>');
+    const store = new Store(config.stateDir);
+    try { console.log(JSON.stringify(await stageFrontendPilot(new Workflow(config, store, new Orca(store, native, 'read-only')), project, resolve(binding), resolve(state)))); }
+    finally { store.close(); }
+    return;
+  }
   if (['doctor', 'status', 'export'].includes(command ?? '')) {
     const store = new Store(config.stateDir);
     try {
